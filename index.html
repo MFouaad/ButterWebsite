@@ -162,7 +162,8 @@ footer .mono{color:var(--mute)}
 </div>
 
 <script>
-const FEED_URL='/api/videos';
+const FEED_URL='https://butter-videos.butterfilms.workers.dev/';
+const MUSIC_IDS=['986685190'];
 let VIDEOS=[];
 let TOTAL=VIDEOS.length;
 const STEP=6;
@@ -194,7 +195,7 @@ function render(){
   $('grid').innerHTML=vis.map((v,i)=>`<div class="card" data-i="${i}"><div class="th"><img src="${v.thumb}" alt=""><span class="dur mono">${fmt(v.dur)}</span><div class="pbtn"></div></div><div class="m"><span class="t">${v.title}</span><span class="mono tag">${v.tag}</span></div></div>`).join('');
   document.querySelectorAll('.card').forEach((c,i)=>{c.onclick=()=>open(+c.dataset.i);setTimeout(()=>c.classList.add('in'),50*i)});
   const total=filter==='All'?TOTAL:list.length, n=Math.min(vis.length,total);
-  $('count').textContent=`${n} of ${total} films`;
+  $('count').textContent=`${n} of ${total}`;
   $('barfill').style.width=(n/total*100)+'%';
   $('moreBtn').style.display=(vis.length>=list.length&&filter!=='All')?'none':'';
 }
@@ -211,7 +212,7 @@ async function boot(){
     try{const r=await fetch(u);if(!r.ok)continue;const d=await r.json();
       if(Array.isArray(d)&&d.length&&d[0].id&&d[0].thumb){VIDEOS=d;break}}catch(e){}
   }
-  VIDEOS=VIDEOS.map(v=>({...v,tag:/music/i.test(v.tag||'')?'Music video':'Commercial'}));
+  VIDEOS=VIDEOS.map(v=>({...v,tag:(/music|album/i.test((v.tag||'')+' '+(v.title||''))||MUSIC_IDS.includes(String(v.id)))?'Music video':'Commercial'}));
   TOTAL=VIDEOS.length;buildChips();render();
 }
 boot();
