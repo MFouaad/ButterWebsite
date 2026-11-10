@@ -146,7 +146,7 @@ footer .mono{color:var(--mute)}
 <div class="w contact" id="contact">
   <span class="mono">Got a brief? Say hello</span><br>
   <a class="mail" href="mailto:info@butterfilms.co">info@butterfilms.co</a>
-  <address class="addr"><span class="mono">Visit us</span><a href="https://maps.google.com/?q=8+Shagaret+El+Dor+St+Zamalek+Cairo" target="_blank" rel="noopener">8 Shagaret El Dor St., Zamalek, Cairo</a></address>
+  <address class="addr"><span class="mono">Visit us</span><a href="https://maps.google.com/?q=8+Salah+El+Din+St+Zamalek+Cairo" target="_blank" rel="noopener">8 Salah El Din St., Zamalek, Cairo</a></address>
 </div>
 <footer><div class="w in">
   <span class="mono">&copy; <span id="y"></span> Butter Films &middot; Zamalek, Cairo</span>
@@ -181,8 +181,8 @@ const t0=Date.now();setInterval(()=>{const e=Date.now()-t0,p=n=>String(n).padSta
 $('y').textContent=new Date().getFullYear();
 /* work */
 function buildChips(){
-  const tags=['All',...new Set(VIDEOS.map(v=>v.tag).filter(Boolean))];
-  $('chips').innerHTML=tags.length>2?tags.map(t=>`<button class="chip${t===filter?' on':''}" data-t="${t}">${t}</button>`).join(''):'';
+  const tags=['All','Commercial','Music video'];
+  $('chips').innerHTML=tags.map(t=>`<button class="chip${t===filter?' on':''}" data-t="${t}">${t}</button>`).join('');
 }
 $('chips').onclick=e=>{const t=e.target.dataset.t;if(!t)return;filter=t;shown=STEP;document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c.dataset.t===t));render()};
 buildChips();
@@ -211,6 +211,7 @@ async function boot(){
     try{const r=await fetch(u);if(!r.ok)continue;const d=await r.json();
       if(Array.isArray(d)&&d.length&&d[0].id&&d[0].thumb){VIDEOS=d;break}}catch(e){}
   }
+  VIDEOS=VIDEOS.map(v=>({...v,tag:/music/i.test(v.tag||'')?'Music video':'Commercial'}));
   TOTAL=VIDEOS.length;buildChips();render();
 }
 boot();
