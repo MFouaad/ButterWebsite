@@ -197,7 +197,7 @@ function render(){
   const total=filter==='All'?TOTAL:list.length, n=Math.min(vis.length,total);
   $('count').textContent=`${n} of ${total}`;
   $('barfill').style.width=(n/total*100)+'%';
-  $('moreBtn').style.display=(vis.length>=list.length&&filter!=='All')?'none':'';
+  $('moreBtn').style.display=(vis.length>=list.length)?'none':'';
 }
 $('moreBtn').onclick=()=>{shown+=STEP;render()};
 function open(i){cur=i;const v=list[i];
